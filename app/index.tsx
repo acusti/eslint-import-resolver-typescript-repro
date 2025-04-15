@@ -7,8 +7,6 @@ import { containsFiles, getFiles } from "@atlaskit/pragmatic-drag-and-drop/exter
 import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled";
 import { useEffect, useRef, useState } from "react";
 
-import { submitForm } from "~/utils/forms.ts";
-
 export default function Uploads() {
     const formRef = useRef<HTMLFormElement>(null);
     const dropAreaRef = useRef<HTMLDivElement>(null);
@@ -33,7 +31,7 @@ export default function Uploads() {
                         dataTransfer.items.add(file);
                     });
                     fileInput.files = dataTransfer.files;
-                    form.submit();
+                    form.requestSubmit();
                 },
             }),
             monitorForExternal({
@@ -75,7 +73,9 @@ export default function Uploads() {
                     className="drop-files-input"
                     multiple
                     name="files"
-                    onChange={submitForm}
+                    onChange={() => {
+                        formRef.current?.requestSubmit();
+                    }}
                     ref={fileInputRef}
                     type="file"
                 />
